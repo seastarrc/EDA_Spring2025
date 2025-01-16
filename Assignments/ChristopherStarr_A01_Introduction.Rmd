@@ -22,15 +22,15 @@ Enter answers to the questions just below the >Answer: prompt.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer: I have been dabbling in computer science since highschool (I am 40 so a few years now). I have spent some time working with CRMs that have a different interface for working with data but intuitively work in similar ways. I did some of my core coursework at Duke/Sanford in R as a means to try to teach myself to use it. The rest of class we did in Stata which is another aspect of my experience. I have used Git for other projects over the years. 
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: 
+> Answer: I love learning software platforms and learning to code. R is awesome and I feel thus far its going well. 
 
 3. Are there any components of the course about which you feel apprehensive?
 
-> Answer: 
+> Answer: I am struggling with some of the conversations we have had about data. The words we use don't intuitively make sense to me and I am worried I might get behind understanding those aspects. 
 
 
 ## 2) GitHub
