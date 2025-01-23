@@ -34,11 +34,15 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 #1. Generate a sequence of numbers from one to 55, increasing by fives. Assign this sequence a name.
 seq1.55.5.assignment01 <- seq(1,55,5) #naming the sequence "seq1.55.5.assignment01" then generating the sequence
 
+
 #2. Compute the mean and median of this sequence.
+
 meanseq1.55.5.assignment01 <- mean(seq1.55.5.assignment01) #naming the mean of "seq1..."
 medianseq1.55.5.assignment01 <- median(seq1.55.5.assignment01) #naming the med of "seq1..."
 
+
 #3. Ask R to determine whether the mean is greater than the median.
+
 meanseq1.55.5.assignment01 > medianseq1.55.5.assignment01 #asking R to evaluate the statement Mean is greater than Median of "seq1..."
 
 ```
@@ -54,13 +58,16 @@ meanseq1.55.5.assignment01 > medianseq1.55.5.assignment01 #asking R to evaluate 
 8.  Label the columns of your data frame with informative titles.
 
 ```{r basics 2}
-
+studentnames <- c("Tom","Mick", "Harry", "Angie") #create student names vector
+testscores <- c(75,79,68,97) #create a list of test scores
+scholarshipstatus <- c(TRUE,FALSE,FALSE,TRUE) #designation of scholarship status TRUE=on a scholarship
+studentrecords <- data.frame(studentnames, testscores, scholarshipstatus) #combine each independent vector into one data frame, allowing the points across vectors to be aligned with the name of the students.
 
 ```
 
 9.  QUESTION: How is this data frame different from a matrix?
 
-> Answer:
+> Answer: This data frame has different kinds of data. Student names are strings, test scores are numbers, scholarship T/F is logi (or maybe could be a 1 or 0 or even string).
 
 10. Create a function with one input. In this function, use `if`...`else` to evaluate the value of the input: if it is greater than 50, print the word "Pass"; otherwise print the word "Fail". 
 
