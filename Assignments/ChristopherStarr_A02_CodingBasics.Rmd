@@ -31,11 +31,15 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 4.  Insert comments in your code to describe what you are doing.
 
 ```{r basics 1}
-#1. 
+#1. Generate a sequence of numbers from one to 55, increasing by fives. Assign this sequence a name.
+seq1.55.5.assignment01 <- seq(1,55,5) #naming the sequence "seq1.55.5.assignment01" then generating the sequence
 
-#2. 
+#2. Compute the mean and median of this sequence.
+meanseq1.55.5.assignment01 <- mean(seq1.55.5.assignment01) #naming the mean of "seq1..."
+medianseq1.55.5.assignment01 <- median(seq1.55.5.assignment01) #naming the med of "seq1..."
 
-#3. 
+#3. Ask R to determine whether the mean is greater than the median.
+meanseq1.55.5.assignment01 > medianseq1.55.5.assignment01 #asking R to evaluate the statement Mean is greater than Median of "seq1..."
 
 ```
 
