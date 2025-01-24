@@ -102,8 +102,10 @@ simplefunctionifelse <- evaluatingscoreifelse(52.5) #writing instructions for as
 simplefunctionifelse #telling the function to run with 52.5
 
 #13a. Run the first function with the vector of test scores
-simplefunctionif.else_testscore_list <- evaluatingscoreif...else(testscores) #writing instruction for asking evaluatingscoreif...else function to run with the scores in vector testscores under the name simplefunctionif...else
-simplefunctionif.else_testscore_list #telling the function to run with testscores added for x.
+
+###commenting out as this code throws an error ### simplefunctionif.else_testscore_list <- evaluatingscoreif...else(testscores) #writing instruction for asking evaluatingscoreif...else function to run with the scores in vector testscores under the name simplefunctionif...else
+
+###commenting out as this code throws an error ### simplefunctionif.else_testscore_list #telling the function to run with testscores added for x.
 
 #13b. Run the second function with the vector of test scores
 simplefunctionifelse_testscore_list <- evaluatingscoreifelse(testscores) #writing instructions for asking function evaluatingscoreifelse to run with testscores inserted for x
