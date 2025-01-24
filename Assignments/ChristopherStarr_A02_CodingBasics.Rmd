@@ -2,7 +2,7 @@
 title: "Assignment 2: Coding Basics"
 author: "Christopher Starr"
 output: pdf_document
-geometry: margin=2.54cm
+geometry: margin=1.54cm
 editor_options: 
   chunk_output_type: console
 ---
