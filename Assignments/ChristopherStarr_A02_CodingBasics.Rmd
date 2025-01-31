@@ -33,21 +33,24 @@ This exercise accompanies the lessons/labs in Environmental Data Analytics on co
 ```{r basics 1}
 #1. Generate a sequence of numbers from one to 55, increasing by fives.
 #Assign this sequence a name.
-seq1.55.5.assignment01 <- seq(1,55,5) #naming the sequence "seq1.55.5.assignment01" then generating the sequence
+
+seq1.55.5.assignment01 <- seq(1,55,5) #naming the sequence 
+#"seq1.55.5.assignment01" then generating the sequence
 
 
 #2. Compute the mean and median of this sequence.
 
-meanseq1.55.5.assignment01 <- mean(seq1.55.5.assignment01) #naming the mean
-#of "seq1..."
-medianseq1.55.5.assignment01 <- median(seq1.55.5.assignment01) #naming the 
-#med of "seq1..."
+meanseq1.55.5.assignment01 <- mean(seq1.55.5.assignment01) 
+#naming the mean of "seq1..."
+
+medianseq1.55.5.assignment01 <- median(seq1.55.5.assignment01) 
+#naming the median of "seq1..."
 
 
 #3. Ask R to determine whether the mean is greater than the median.
 
-meanseq1.55.5.assignment01 > medianseq1.55.5.assignment01 #asking R to 
-#evaluate the statement Mean is greater than Median of "seq1..."
+meanseq1.55.5.assignment01 > medianseq1.55.5.assignment01 
+#asking R to evaluate the statement Mean is greater than Median of "seq1..."
 
 ```
 
@@ -62,24 +65,26 @@ meanseq1.55.5.assignment01 > medianseq1.55.5.assignment01 #asking R to
 8.  Label the columns of your data frame with informative titles.
 
 ```{r basics 2}
-studentnames <- c("Tom","Mick", "Harry", "Angie") #create student names 
-#vector
+#Create three vectors. Label each w/ a data type. 
 
-testscores <- c(75,79,68,97) #create a list of test scores
+studentnames <- c("Tom","Mick", "Harry", "Angie") 
+#create student names vector - string data type.
 
-scholarshipstatus <- c(TRUE,FALSE,FALSE,TRUE) #designation of scholarship 
-#status TRUE=on a scholarship
+testscores <- c(75,79,68,97) #create a list of test scores - number data type.
 
-studentrecords <- data.frame(studentnames, testscores, scholarshipstatus) #combine each independent vector into one data frame, allowing the points 
+scholarshipstatus <- c(TRUE,FALSE,FALSE,TRUE) 
+#designation of scholarship status TRUE=on a scholarship - logic data type.
+
+#Combine vectors into a data frame.
+studentrecords <- data.frame(studentnames, testscores, scholarshipstatus) 
+#combine each independent vector into one data frame, allowing the points 
 #across vectors to be aligned with the name of the students.
 
 ```
 
 9.  QUESTION: How is this data frame different from a matrix?
 
-> Answer: This data frame has different kinds of data. Student names are 
-#strings, test scores are numbers, scholarship T/F is logic (or maybe could 
-#be a 1 or 0 or even string).
+> Answer: This data frame has different kinds of data. Student names are strings, test scores are numbers, scholarship T/F is logic (or maybe could be a 1 or 0 or even string). A matrix cannot mix data types.
 
 10. Create a function with one input. In this function, use `if`...`else` to evaluate the value of the input: if it is greater than 50, print the word "Pass"; otherwise print the word "Fail". 
 
@@ -93,36 +98,46 @@ studentrecords <- data.frame(studentnames, testscores, scholarshipstatus) #combi
 #10. Create a function using if...else
 evaluatingscoreif...else <- function(x){
   if (x>50) print("Pass") else
-  print("Fail") #creating the recipe for if...else version
+  print("Fail") #creating the recipe for if/else version
 }
+
+
 #11. Create a function using ifelse()
 evaluatingscoreifelse <- function(x){
   ifelse(x>50, "Pass", "Fail")
-} #creating the recipe for ifelse version
+} #creating the recipe for ifelse() version
+
 
 #12a. Run the first function with the value 52.5
-simplefunctionif...else <- evaluatingscoreif...else(52.5) #writing 
-#instruction for asking evaluatingscoreif...else function to run with the 
-#score 52.5 under the name simplefunctionif...else
+simplefunctionif...else <- evaluatingscoreif...else(52.5) 
+#writing instruction for asking evaluatingscoreif...else function to run with 
+#the score 52.5 under the name simplefunctionif...else
 
 simplefunctionif...else #telling the function to run with 52.5 added for x.
 
+
 #12b. Run the second function with the value 52.5
-simplefunctionifelse <- evaluatingscoreifelse(52.5) #writing instructions for
-#asking function evaluatingscoreifelse to run with 52.5
+simplefunctionifelse <- evaluatingscoreifelse(52.5) 
+#writing instructions for asking function evaluatingscoreifelse to run with 52.5
 
 simplefunctionifelse #telling the function to run with 52.5
 
+
 #13a. Run the first function with the vector of test scores
 
-###commenting out as this code throws an error ### simplefunctionif.else_testscore_list <- evaluatingscoreif...else(testscores) #writing instruction for asking evaluatingscoreif...else function to run with
+###commenting out as this code throws an error and won't allow knit ### 
+#simplefunctionif.else_testscore_list <- evaluatingscoreif...else(testscores) 
+#writing instruction for asking evaluatingscoreif...else function to run with
 #the scores in vector testscores under the name simplefunctionif...else
 
-###commenting out as this code throws an error ### simplefunctionif.else_testscore_list #telling the function to run with 
+###commenting out as this code throws an error and won't allow knit ### 
+#simplefunctionif.else_testscore_list #telling the function to run with 
 #testscores added for x.
 
+
 #13b. Run the second function with the vector of test scores
-simplefunctionifelse_testscore_list <- evaluatingscoreifelse(testscores) #writing instructions for asking function evaluatingscoreifelse to run with 
+simplefunctionifelse_testscore_list <- evaluatingscoreifelse(testscores) 
+#writing instructions for asking function evaluatingscoreifelse to run with 
 #testscores inserted for x
 
 simplefunctionifelse_testscore_list #telling the function to run with 
@@ -131,12 +146,9 @@ simplefunctionifelse_testscore_list #telling the function to run with
 
 14. QUESTION: Which option of `if`...`else` vs. `ifelse` worked? Why? (Hint: search the web for "R vectorization")
 
-> Answer: it seems if/else does not loop itself, or it can't run multiple 
-#times the function automatically. it says it can only do it once: "Error in 
-#if (x > 50) print("Pass") else print("Fail") :the condition has length > 1"
+> Answer: ifelse() worked and if/else did not. it seems if/else does not loop itself, or it can't run multiple times the function automatically. it says it can only do it once: "Error in if (x > 50) print("Pass") else print("Fail") :the condition has length > 1"
 
-> it seems ifelse() is able to vectorize or run all values from the list as a
-#sort of loop function. 
+> it seems ifelse() is able to vectorize or run all values from the list as a sort of loop function. 
 
 
 **NOTE** Before knitting, you'll need to comment out the call to the function in Q13 that does not work. (A document can't knit if the code it contains causes an error!)
