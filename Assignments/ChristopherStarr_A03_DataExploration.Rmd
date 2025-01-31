@@ -35,7 +35,7 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 ```{r,  message = FALSE}
 
 #Read packages
-library(tidyverse); library(lubridate); library(here)
+library(tidyverse); library(lubridate); library(here); library(ggplot2)
 
 #Read in data, don't convert strings to factors
 Neonics <- read.csv(here('Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv'), stringsAsFactors = TRUE)
@@ -116,31 +116,46 @@ class(Neonics$Conc.1..Author.)
 9.  Using `geom_freqpoly`, generate a plot of the number of studies conducted by publication year.
 
 ```{r}
-
-
+ggplot(Neonics, aes(x = Publication.Year)) +
+  geom_freqpoly()
+# asking R to generate a graph showing x as years and y as number of publications per year
 ```
 
 10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
 
 ```{r}
-
-
+ggplot(Neonics, aes(x = Publication.Year, color = Test.Location)) +
+  geom_freqpoly(binwidth = 1)
+# asking R to generate a graph showing years/studies per year with a different color line
+# to show different locations of where the data was gathered.
 ```
 
 Interpret this graph. What are the most common test locations, and do they differ over time?
 
-> Answer:
+> Answer: In the early 90s it was a close match between Field natural and Lab. In the late 90s Field natural became dominant. Throughout the 2000s it has been most Lab as the dominant location with the exception of 2009 when Field natural had a big spike.
 
 11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
 
 [**TIP**: Add `theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))` to the end of your plot command to rotate and align the X-axis labels...]
 
 ```{r}
-
+ggplot(Neonics, aes(x=Endpoint)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+# asking R to create a bar chart of Endpoints to show frequency. Adding theme elements
+# to help with aesthetics since the data is not easily visible without some adjustments.
 
 ```
 
-> Answer:
+> Answer: the most common endpoints are NOEL and LOEL. 
+No-observable-effect-level: highest dose (concentration)
+producing effects not significantly different from responses of
+controls according to author's reported statistical test
+(NOEAL/NOEC)
+Lowest Observed Effects Residue: The lowest residue
+concentration producing effects that were significantly different
+from responses of controls according to author's reported
+statistical test
 
 ## Explore your data (Litter)
 
