@@ -96,18 +96,20 @@ mortality, which might be checking to see if there are fully dead trees in the s
 sort(summary(Neonics$Species.Common.Name), decreasing = TRUE)
 # asing R to put the data in order for the Neonics file, Species.Common.Name vector, decreasing by 
 # frequency. 
+summary(Neonics$Species.Common.Name, maxsum = 10)
+# asking R to show me the ten largest categories.
 ```
 
-> Answer:
+> Answer: Most of the top 10 is made up of bee species. Bees are thought to have an outsized impact on ecosystems and pollenation. The other names sound like paracites of interest. Perhaps their numbers are being closely examed to understand how bad their presence is in the area(s) being studied. 
 
 8.  Concentrations are always a numeric value. What is the class of `Conc.1..Author.` column in the dataset, and why is it not numeric? [Tip: Viewing the dataframe may be helpful...]
 
 ```{r}
-
-
+class(Neonics$Conc.1..Author.)
+# asking R to tell me the class or Conc.1..Author. 
 ```
 
-> Answer:
+> Answer: The vector is a Factor data type. It is not a number because there are a lot of special characters in the vector list (< and >, /, etc) which cannot be processed as numbers. 
 
 ## Explore your data graphically (Neonics)
 
