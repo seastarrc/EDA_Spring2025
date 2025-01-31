@@ -1,7 +1,7 @@
 ---
 title: "Assignment 3: Data Exploration"
-author: "Student Name"
-date: "Fall 2024"
+author: "Christopher Starr"
+date: "Spring 2025"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -34,50 +34,68 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 
 ```{r,  message = FALSE}
 
+#Read packages
+library(tidyverse); library(lubridate); library(here)
 
+#Read in data, don't convert strings to factors
+Neonics <- read.csv(here('Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv'), stringsAsFactors = TRUE)
+# reading in as .csv
+str(Neonics)
+#taking a look at the datase
+
+Litter <- read.csv(here("Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv"), stringsAsFactors = TRUE)
+# reading in as .csv
+str(Litter)
+#taking a look at the datase
 ```
 
 ## Learn about your system
 
 2.  The neonicotinoid dataset was collected from the Environmental Protection Agency's ECOTOX Knowledgebase, a database for ecotoxicology research. Neonicotinoids are a class of insecticides used widely in agriculture. The dataset that has been pulled includes all studies published on insects. Why might we be interested in the ecotoxicology of neonicotinoids on insects? Feel free to do a brief internet search if you feel you need more background information.
 
-> Answer:
+> Answer: Likely we are looking for links between populations of certain insects and use of insecticides. Ideally we want to find a strong correlation between declines and use of insectices so we can understand what insects are being killed by their use and how dramatically the population is harmed. Maybe then we can match this information with what we know about different classes of affected insects and thier role in other areas of plant/animal life.
 
 3.  The Niwot Ridge litter and woody debris dataset was collected from the National Ecological Observatory Network, which collectively includes 81 aquatic and terrestrial sites across 20 ecoclimatic domains. 32 of these sites sample forest litter and woody debris, and we will focus on the Niwot Ridge long-term ecological research (LTER) station in Colorado. Why might we be interested in studying litter and woody debris that falls to the ground in forests? Feel free to do a brief internet search if you feel you need more background information.
 
-> Answer:
+> Answer: Likely we want to understand what trees and other forest plants are dropping to understand if their overall health is declining. For instance are they dropping more leaves and branches than before? Is there a decline in seed or other "reproductive" litter count or density?
 
 4.  How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here:
 
 > Answer: 
- 1.
- 2.
- 3. 
+ 1. The team set ground-level and above ground traps to collect material in areas with vegation that is more than 2 meters tall. They meausured the materials at different times depending on the collection method (above ground every 1-2 weeks, on ground once per year).
+ 2. The ground and above-ground traps were paired together and were either placed randomly (in thick forest areas) or targetted (where the forest was not as thick). The sampling occurred in something called Tower Plots.
+ 3. They measured up to .01g accuracy 8 types of vegetation (Leaves, needles, seeds, etc.). 
 
 ## Obtain basic summaries of your data (Neonics)
 
 5.  What are the dimensions of the dataset?
 
 ```{r}
-
-
+str(Neonics)
+# Taking a look at the Neonics dataset
+# 4632 obersavtions with 30 variables each
 ```
 
 6.  Using the `summary` function on the "Effect" column, determine the most common effects that are studied. Why might these effects specifically be of interest? [Tip: The `sort()` command is useful for listing the values in order of magnitude...]
 
 ```{r}
-
-
+sort(summary(Neonics$Effect), decreasing = TRUE)
+# asing R to put the data in order for the Neonics file, Effect vector, decreasing by 
+# frequency. 
 ```
 
-> Answer:
+> Answer:Population (1803), Mortality (1493), and Behavior (360) are the largest categories.
+By measuring the litter we can see if there are more types of litter so we can understand
+if the population of a certain type of litter is increasing or decreasing. We can also check
+mortality, which might be checking to see if there are fully dead trees in the sample. 
 
 
 7.  Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.[TIP: Explore the help on the `summary()` function, in particular the `maxsum` argument...]
 
 ```{r}
-
-
+sort(summary(Neonics$Species.Common.Name), decreasing = TRUE)
+# asing R to put the data in order for the Neonics file, Species.Common.Name vector, decreasing by 
+# frequency. 
 ```
 
 > Answer:
