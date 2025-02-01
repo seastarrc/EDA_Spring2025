@@ -162,18 +162,27 @@ statistical test
 12. Determine the class of collectDate. Is it a date? If not, change to a date and confirm the new class of the variable. Using the `unique` function, determine which dates litter was sampled in August 2018.
 
 ```{r}
+class(Litter$collectDate)
+# asking R what collectDate is. Initial Response = "factor"
 
+Litter$collectDate <- ymd(Litter$collectDate)
+#asking R to use lubridate to to convert the column to date format.
 
+class(Litter$collectDate)
+#verifying the class changed. result = "Date"
 ```
 
 13. Using the `unique` function, determine how many different plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
 
 ```{r}
-
+unique(Litter$plotID)
+#asking R to tell me how many plotID values there are
+sort(summary(Litter$plotID), decreasing = TRUE)
+#asking R to show me the list of all plotIDs and their count, in descending order.
 
 ```
 
-> Answer:
+> Answer:Unique returns a count of how many different values are in the vector and lists them. Summary returns the list of each vector AND the number of times each value occurs in the vector. 
 
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
