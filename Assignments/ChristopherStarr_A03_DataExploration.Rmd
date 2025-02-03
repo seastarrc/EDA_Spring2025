@@ -37,13 +37,15 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 #Read packages
 library(tidyverse); library(lubridate); library(here); library(ggplot2)
 
-#Read in data, don't convert strings to factors
-Neonics <- read.csv(here('Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv'), stringsAsFactors = TRUE)
+#Read in data, convert strings to factors
+Neonics <- read.csv(here('Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv'), 
+                    stringsAsFactors = TRUE)
 # reading in as .csv
 str(Neonics)
 #taking a look at the datase
 
-Litter <- read.csv(here("Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv"), stringsAsFactors = TRUE)
+Litter <- read.csv(here("Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv"), 
+                   stringsAsFactors = TRUE)
 # reading in as .csv
 str(Litter)
 #taking a look at the datase
@@ -187,21 +189,32 @@ sort(summary(Litter$plotID), decreasing = TRUE)
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
 ```{r}
-
-
+ggplot(Litter,aes(x=functionalGroup)) +
+  geom_bar()
+#asking R to create a bar graph with functionalGroup as the X axis and count as Y.
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup.
 
 ```{r}
+ggplot(Litter, aes(x=functionalGroup, y=dryMass)) +
+  geom_boxplot()
+# asking R to create a box plot with x as the type of material and y as the size of the measurements.
+# box plot will force the data into quartiles. 
 
+ggplot(Litter, aes(x=functionalGroup, y=dryMass)) +
+  geom_violin()
+# asking R to create a violin plot with x as the type of material and y as the size of measurments.
+# violin plot will show the data as it exists across the full spectrum of the datapoints.
+
+by(Litter$dryMass, Litter$functionalGroup, summary)
 
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
-> Answer:
+> Answer: Violin plot shows the data more correctly, as a wider distribution, with no cutoffs for the quartiles. The box plot cuts off the data and creates hard boundaries of where the quartiles end and generates a dramatic cutoff in the visual. 
 
 What type(s) of litter tend to have the highest biomass at these sites?
 
-> Answer:
+> Answer:Needles are the highest, followed by mixed and twigs/branches. My heart goes out to the team that did 188 measurements of this type. Important work, its amazing data to have, but it must have been a labor of love. 
