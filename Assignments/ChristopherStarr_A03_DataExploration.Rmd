@@ -87,9 +87,8 @@ sort(summary(Neonics$Effect), decreasing = TRUE)
 ```
 
 > Answer:Population (1803), Mortality (1493), and Behavior (360) are the largest categories.
-By measuring the litter we can see if there are more types of litter so we can understand
-if the population of a certain type of litter is increasing or decreasing. We can also check
-mortality, which might be checking to see if there are fully dead trees in the sample. 
+Population is measuring density of the same species in area. We can also check
+mortality, which measures deaths caused specifically by the chemical. Behavior is about avoiding an area, general behavior or feeding. It seems they are looking for reduced density of the populations, dead animals in a given area and indications of areas being avoided. It might be to see if populations are moivng to other areas/have reduced numbers, avoiding an area, or seem to be unaffected. Its interesting to see if they are dying, moving away or unaffected. All of which would have interesting implications about how the insects are reacting to the chemicals. 
 
 
 7.  Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.[TIP: Explore the help on the `summary()` function, in particular the `maxsum` argument...]
