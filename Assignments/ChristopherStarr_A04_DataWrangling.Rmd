@@ -64,10 +64,10 @@ EPAair_PM25_NC2019_raw <- read.csv(
 
 #2 - checking on the dimensions of the four sets of data.
 
-summary(EPAair_O3_NC2018_raw)
-summary(EPAair_O3_NC2019_raw)
-summary(EPAair_PM25_NC2018_raw)
-summary(EPAair_PM25_NC2019_raw)
+dim(EPAair_O3_NC2018_raw)
+dim(EPAair_O3_NC2019_raw)
+dim(EPAair_PM25_NC2018_raw)
+dim(EPAair_PM25_NC2019_raw)
 
 ```
 
@@ -107,19 +107,23 @@ class(EPAair_O3_NC2018_raw$Date)
 #creating four new datasets that only include 7 vectors
 EPAair_O3_NC2018_processed <- 
   EPAair_O3_NC2018_raw %>%
-  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, 
+         SITE_LATITUDE, SITE_LONGITUDE)
 
 EPAair_O3_NC2019_processed <- 
   EPAair_O3_NC2019_raw %>%
-  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, 
+         SITE_LATITUDE, SITE_LONGITUDE)
 
 EPAair_PM25_NC2018_processed <- 
 EPAair_PM25_NC2018_raw %>%
-  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, 
+         SITE_LATITUDE, SITE_LONGITUDE)
 
 EPAair_PM25_NC2019_processed <- 
   EPAair_PM25_NC2019_raw %>%
-  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, 
+         SITE_LATITUDE, SITE_LONGITUDE)
 
 #5
 #changing two datasets for which all vectors were measured at PM2.5 so that they all read
@@ -188,26 +192,37 @@ PM25.19 <- read.csv("Data/Processed/EPAair_PM25_NC2019_processed.csv")
 EPAair_O3_PM25_NC1819_Processed <- rbind(O3.18, O3.19, PM25.18, PM25.19)
 
 #8 
+#create a list of the sites all four datasets have in common
 Sites_in_Common <- c("Linville Falls", "Durham Armory", "Leggett", "Hattie Avenue", 
                            "Clemmons Middle", "Mendenhall School", "Frying Pan Mountain", 
-                           "West Johnston Co.", "Garinger High School", "Castle Hayne", "Pitt Agri. Center", 
-                           "Bryson City", "Millbrook School")
+                           "West Johnston Co.", "Garinger High School", "Castle Hayne", 
+                           "Pitt Agri. Center", "Bryson City", "Millbrook School")
 
+#Take the mean of the AQI value, latitude, and longitude -- by date, site name, 
+#AQS parameter, and county. then add columns for "Month" and "Year" by parsing your "Date"
 EPAair_O3_PM25_NC1819_Processed <- 
   EPAair_O3_PM25_NC1819_Processed %>% 
   filter(Site.Name %in% Sites_in_Common & !is.na(Site.Name)) %>%
-  group_by(Date, Site.Name, COUNTY, AQS_PARAMETER_DESC) %>%
-  summarise(meanAQI = mean(DAILY_AQI_VALUE), meanLAT = mean(SITE_LATITUDE), meanLON = mean(SITE_LONGITUDE)) %>%
+  group_by(Date, Site.Name, COUNTY, AQS_PARAMETER_DESC) %>% 
+  summarise(meanAQI = mean(DAILY_AQI_VALUE), meanLAT = mean(SITE_LATITUDE), 
+            meanLON = mean(SITE_LONGITUDE)) %>%
   mutate(Month = month(Date), Year = year(Date))
 
 #9
+#spread the AQS_Parameter into two columns, one for Ozone and one for Particle 
+#Matter larger than 2.5.
 EPAair_O3_PM25_NC1819_Processed <- EPAair_O3_PM25_NC1819_Processed %>%
-  pivot_longer(AQS_PARAMETER_DESC, names_to = "Ozone", values_to = "PartMatter")
+  pivot_wider(
+    names_from = AQS_PARAMETER_DESC,
+    values_from = meanAQI
+  )
 
 #10
+#check the new dimensions
 dim(EPAair_O3_PM25_NC1819_Processed)
 
 #11
+#save my adjusted dataset
 write_csv(EPAair_PM25_NC2019_processed,
           file = "Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
 
@@ -223,19 +238,37 @@ write_csv(EPAair_PM25_NC2019_processed,
 ```{r questions 12 and 13}
 
 #12
-
+#creating a summary - getting ozone and particular measure means for each month and 
+#each site
 Summary_EPAair_O3_PM25_NC1819_Processed <- 
   EPAair_O3_PM25_NC1819_Processed %>%
   group_by(Site.Name, Month, Year) %>%
-  summarise(meanOzone = mean(Ozone), meanPM2.5 = mean(PartMatter)) 
+  summarise(
+    meanOzone = mean(Ozone, na.rm = TRUE),
+    meanPM2.5 = mean(PM2.5, na.rm = TRUE)
+  ) %>%
+  drop_na(meanOzone)
+
+# Now with na.omit()
+summary_with_na_omit <- 
+  EPAair_O3_PM25_NC1819_Processed %>%
+  group_by(Site.Name, Month, Year) %>%
+  summarise(
+    meanOzone = mean(Ozone, na.rm = TRUE),
+    meanPM2.5 = mean(PM2.5, na.rm = TRUE)
+  ) %>%
+  na.omit()
 
 #13
-
+#check the new dimensions
+dim(Summary_EPAair_O3_PM25_NC1819_Processed)
+dim(summary_with_na_omit)
 
 
 ```
 
 14. Why did we use the function `drop_na` rather than `na.omit`? Hint: replace `drop_na` with `na.omit` in part 12 and observe what happens with the dimensions of the summary date frame.
 
-> Answer: 
+> Answer: drop_na(meanOzone) only removes rows where the meanOzone column has NA values
+ -- na.omit() removes rows where ANY column has NA values, including meanPM2.5 We used drop_na() because we specifically wanted to keep rows that had Ozone measurements but were missing PM2.5 measurements. 
 
