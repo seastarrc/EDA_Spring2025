@@ -63,8 +63,6 @@ epa_data <- read.csv(
 
 ------------------------------------------------------------------------
 
-\newpage
-
 ## Task 3: Creating tables
 
 Set the following R code chunk to display two tables, using knitr's `kable()` function, one listing the mean PM2.5 concentrations for each county, and the other the same except for Ozone.
@@ -109,7 +107,6 @@ knitr::kable(summary_Ozone,
              col.names = c("County", "$\\mu g/m^3$"),
              digits = 2)
 ```
-
 ------------------------------------------------------------------------
 
 ## Task 4: Plots
@@ -122,28 +119,25 @@ epa_data %>%
   filter(year(Date) == 2018) %>%
   ggplot(aes(x = factor(month(Date)), y = Ozone)) +
   geom_boxplot() +
-  labs(x = "Month", y = "Ozone Level") +
+  labs(x = "Month", y = "Ozone Concentration (μg/m3)") +
   theme_minimal()
 ```
-
 ```{r ozone_2019, echo=FALSE, fig.align='left', fig.height=3.5, fig.width=7, fig.cap="Distribution of Ozone Levels by Month in 2019", warning=F}
 # create 2019 Ozone levels by month boxplot
-
 epa_data %>%
   filter(year(Date) == 2019) %>%
   ggplot(aes(x = factor(month(Date)), y = Ozone)) +
   geom_boxplot() +
-  labs(x = "Month", y = "Ozone Level") +
+  labs(x = "Month", y = "Ozone Concentration (μg/m3)") +
   theme_minimal()
 ```
 
-
 ------------------------------------------------------------------------
-
-\newpage
 
 ## Task 5: Knit and submit.
 
 Add a table of contents and list of figures to your document and knit to a PDF. Submit your PDF to Sakai, but also be sure to commit and push your Rmd file used to create this knit document to GitHub. In the section below, add a link to your GitHub repository.
 
 ## Git Repository
+
+https://github.com/seastarrc/EDA_Spring2025
