@@ -63,7 +63,7 @@ epa_data <- read.csv(
 
 ------------------------------------------------------------------------
 
-## Task 3: Creating tables
+## Task 3: Creating tables - part 2
 
 Set the following R code chunk to display two tables, using knitr's `kable()` function, one listing the mean PM2.5 concentrations for each county, and the other the same except for Ozone.
 
