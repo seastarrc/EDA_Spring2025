@@ -28,7 +28,7 @@ This exercise accompanies the lessons in Environmental Data Analytics (ENV872L) 
 
 ```{r Prepare workspace, error=F, warning=F}
 #1. 
-install.packages(c("tidyverse"),("sf"),("leaflet"))
+#install.packages(c("tidyverse"),("sf"),("leaflet"))
 
 
 # Load the libraries
@@ -92,7 +92,7 @@ Next we'll read in some USGS/NWIS gage location data added to the `Data/Raw` fol
 library(readr)
 library(dplyr)
 
-gage_locations <- read_csv("Data/Raw/NWIS_SiteInfo_NE_RAW.csv") %>%
+gage_locations <- read_csv(here("Data/Raw/NWIS_SiteInfo_NE_RAW.csv")) %>%
   mutate(across(where(is.character), as.factor))
 
 # 8. Display the structure of this dataset
@@ -171,7 +171,7 @@ Lastly, we want to attach some gage height data to our site locations. I've cons
 ```{r Read in gage site data}
 # 14. Read the NWIS_SiteFlowData_NE_RAW.csv dataset as a dataframe
 # Setting character fields as factors
-flow_data <- read_csv("Data/Raw/NWIS_SiteFlowData_NE_RAW.csv") %>%
+flow_data <- read_csv(here("Data/Raw/NWIS_SiteFlowData_NE_RAW.csv")) %>%
   mutate(
     # Convert site_no and station_nm to factors
     site_no = as.factor(site_no),
