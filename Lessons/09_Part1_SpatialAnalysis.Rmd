@@ -64,7 +64,7 @@ sf::sf_use_s2(FALSE)
 
 ```{r Read in road data}
 #Read the GeoJSON file into a spatial dataframe
-GasPlants <- st_read(here('Data/Spatial/Manufactured_Gas_Plant_Sites.geojson'))
+GasPlants <- st_read(here('Data/Raw/Spatial/Manufactured_Gas_Plant_Sites.geojson'))
 
 #Explore as a typical dataframe
 class(GasPlants)
