@@ -1,6 +1,6 @@
 ---
 title: "Assignment 10: Data Scraping"
-author: "Christpher Starr"
+author: "Christopher Starr"
 output: pdf_document
 editor_options: 
   chunk_output_type: console
@@ -28,25 +28,28 @@ This exercise accompanies the lessons in Environmental Data Analytics on data sc
 ```{r 1. Project Setup, message = FALSE}
 #1 
 #Install familiar packages
-install.packages("viridis")
-install.packages("dataRetrieval")
-install.packages("tidycensus")
+#install.packages("viridis")
+#install.packages("dataRetrieval")
+#install.packages("tidycensus")
 library(tidyverse);library(lubridate);library(viridis);library(here)
 here()
 
-install.packages("dplyr")
+#install.packages("tinytex")
+tinytex::install_tinytex()
+
+#install.packages("dplyr")
 library(dplyr)
 
-install.packages("rvest")
+#install.packages("rvest")
 library(rvest)
 
-install.packages('xml2')
+#install.packages('xml2')
 library('xml2')
 
-install.packages("dataRetrieval")
+#install.packages("dataRetrieval")
 library(dataRetrieval)
 
-install.packages("tidycensus")
+#install.packages("tidycensus")
 library(tidycensus)
 
 # Set theme
@@ -91,40 +94,25 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r scrape.the.data}
 #3 
-# Extract water system name
-water_system_name <- page %>%
-  html_nodes("td") %>%
-  .[grep("Water System Name", html_text(.))] %>%
-  html_text() %>%
-  strsplit(":") %>%
-  .[[1]] %>%
-  .[2] %>%
-  trimws()
+# scrape water system name
+water_system_name <- webpage %>%
+  html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>%
+  html_text()
 
-# Extract PWSID
-pwsid <- page %>%
-  html_nodes("td:nth-child(2)") %>%
-  .[grep("03-32-010", html_text(.))] %>%
-  html_text() %>%
-  trimws()
+# scrape PWSID
+pwsid <- webpage %>%
+  html_nodes("td tr:nth-child(1) td:nth-child(5)") %>%
+  html_text()
 
-# Extract ownership
-ownership <- page %>%
-  html_nodes("tr:nth-child(2) td") %>%
-  .[grep("Municipality", html_text(.))] %>%
-  html_text() %>%
-  trimws()
+# scrape ownership
+ownership <- webpage %>%
+  html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>%
+  html_text() 
 
-# Extract Maximum Day Use for each month
-max_day_row <- page %>%
-  html_nodes("tr") %>%
-  .[grep("Max Day", html_text(.))]
-
-# Get the values from the Max Day row
-max_day_use <- max_day_row %>%
-  html_nodes("td") %>%
-  html_text() %>%
-  .[grepl("[0-9]+\\.[0-9]+", .)]
+# scrape Maximum Day Use for each month
+max_day_use <- webpage %>%
+  html_nodes("th~ td+ td") %>%
+  html_text() 
 
 ```
 
@@ -139,10 +127,27 @@ max_day_use <- max_day_row %>%
 
 ```{r create.a.dataframe.from.scraped.data}
 #4 
-
+#Convert to dataframe
+water_data <- data.frame(
+  "Month" = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")[1:length(max_day_use)],
+  "Water_System_Name" = rep(water_system_name, length(max_day_use)),
+  "PWSID" = rep(pwsid, length(max_day_use)),
+  "Ownership" = rep(ownership, length(max_day_use)),
+  "Max_Day_Use" = as.numeric(gsub('[^0-9.]', '', max_day_use))
+) %>%
+  mutate(Date = as.Date(paste("2024", match(Month, month.abb), "01", sep="-")),
+         Year = 2024)
 
 #5 
-
+ggplot(water_data, aes(x = Date, y = Max_Day_Use)) +
+  geom_line() +
+  geom_point() +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") +
+  labs(title = paste("Maximum Daily Water Withdrawals for", water_system_name, "in 2024"),
+       x = "Month",
+       y = "Maximum Daily Use") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
 
@@ -155,7 +160,47 @@ max_day_use <- max_day_row %>%
 
 ```{r construct.a.scraping.function}
 #6. 
-
+# Create function to scrape water data
+scrape_water_data <- function(PWSID, year) {
+  # Construct URL based on PWSID and year
+  url <- paste0("https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=", PWSID, "&year=", year)
+  
+  # Read the HTML content
+  webpage <- read_html(url)
+  
+  # Scrape water system name
+  water_system_name <- webpage %>%
+    html_nodes("div+ table tr:nth-child(1) td:nth-child(2)") %>%
+    html_text()
+  
+  # Scrape PWSID
+  pwsid_scraped <- webpage %>%
+    html_nodes("td tr:nth-child(1) td:nth-child(5)") %>%
+    html_text()
+  
+  # Scrape ownership
+  ownership <- webpage %>%
+    html_nodes("div+ table tr:nth-child(2) td:nth-child(4)") %>%
+    html_text() 
+  
+  # Scrape Maximum Day Use for each month
+  max_day_use <- webpage %>%
+    html_nodes("th~ td+ td") %>%
+    html_text() 
+  
+  # Convert to dataframe
+  water_data <- data.frame(
+    "Month" = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")[1:length(max_day_use)],
+    "Water_System_Name" = rep(water_system_name, length(max_day_use)),
+    "PWSID" = rep(PWSID, length(max_day_use)),  # Use the input PWSID
+    "Ownership" = rep(ownership, length(max_day_use)),
+    "Max_Day_Use" = as.numeric(gsub('[^0-9.]', '', max_day_use)),
+    "Year" = rep(as.numeric(year), length(max_day_use))  # Use the input year
+  ) %>%
+    mutate(Date = as.Date(paste(Year, match(Month, month.abb), "01", sep="-")))
+  
+  return(water_data)
+}
 
 ```
 
@@ -163,7 +208,19 @@ max_day_use <- max_day_row %>%
 
 ```{r fetch.and.plot.Durham.2020.data}
 #7 
+# Get Durham 2020 data
+durham_2020 <- scrape_water_data(PWSID = "03-32-010", year = 2020)
 
+# Plot the data
+ggplot(durham_2020, aes(x = Date, y = Max_Day_Use)) +
+  geom_line() +
+  geom_point() +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") +
+  labs(title = paste("Maximum Daily Water Withdrawals for", unique(durham_2020$Water_System_Name), "in 2020"),
+       x = "Month",
+       y = "Maximum Daily Use (MGD)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
 
@@ -171,7 +228,29 @@ max_day_use <- max_day_row %>%
 
 ```{r fetch.and.plot.Asheville.2020.data}
 #8 
+# Get Asheville 2020 data
+asheville_2020 <- scrape_water_data(PWSID = "01-11-010", year = 2020)
 
+# Combine the datasets
+combined_2020 <- bind_rows(
+  durham_2020 %>% mutate(City = "Durham"),
+  asheville_2020 %>% mutate(City = "Asheville")
+)
+
+# Create comparison plot
+ggplot(combined_2020, aes(x = Date, y = Max_Day_Use, color = City, group = City)) +
+  geom_line() +
+  geom_point() +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") +
+  labs(title = "Comparison of Maximum Daily Water Withdrawals in 2020",
+       subtitle = "Durham vs. Asheville",
+       x = "Month",
+       y = "Maximum Daily Use (MGD)",
+       color = "City") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top") +
+  scale_color_viridis_d(end = 0.8)
 
 ```
 
@@ -182,10 +261,31 @@ max_day_use <- max_day_row %>%
 
 ```{r fetch.and.plot.Asheville.multiyear.data }
 #9 
+# Define years to analyze
+years <- 2018:2023
 
+# Create a vector of Asheville's PWSID repeated for each year
+pwsids <- rep("01-11-010", length(years))
+
+# Use map2 to apply function to each PWSID-year pair
+asheville_multiyear <- map2(
+  pwsids, 
+  years,
+  ~scrape_water_data(PWSID = .x, year = .y)
+) %>% 
+  bind_rows()
+
+# Plot the data with a loess smoothing line
+ggplot(asheville_multiyear, aes(x = Date, y = Max_Day_Use)) +
+  geom_line() +
+  geom_smooth(method = "loess", color = "red") +
+  labs(title = "Asheville Maximum Daily Water Withdrawals (2018-2023)",
+       x = "Date",
+       y = "Maximum Daily Use (MGD)") +
+  theme_minimal()
 
 ```
 
 Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
-> Answer:
+> Answer: It looks like they are slowly needing to withdraw more water over time. 
 >
