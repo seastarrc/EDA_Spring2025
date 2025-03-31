@@ -35,7 +35,8 @@ library(tidyverse);library(lubridate);library(viridis);library(here)
 here()
 
 #install.packages("tinytex")
-tinytex::install_tinytex()
+#tinytex::install_tinytex()
+library("tinytex")
 
 #install.packages("dplyr")
 library(dplyr)
